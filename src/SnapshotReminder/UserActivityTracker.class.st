@@ -36,11 +36,11 @@ UserActivityTracker >> currentWorld [
 
 {
 	#category : #'event filtering',
-	#'squeak_changestamp' : 'ct 10/2/2025 22:49'
+	#'squeak_changestamp' : 'ct 10/3/2025 18:49'
 }
 UserActivityTracker >> filterEvent: anEvent for: aMorph [
 
-	(self matchesEvent: anEvent) ifTrue: [self lastActiveTime: DateAndTime now].
+	(self matchesEvent: anEvent) ifTrue: [self noteActivity].
 	
 	^ anEvent
 ]
@@ -84,11 +84,21 @@ UserActivityTracker >> matchesEvent: anEvent [
 ]
 
 {
+	#category : #private,
+	#'squeak_changestamp' : 'ct 10/3/2025 18:58'
+}
+UserActivityTracker >> noteActivity [
+
+	self lastActiveTime: DateAndTime now.
+]
+
+{
 	#category : #control,
-	#'squeak_changestamp' : 'ct 10/2/2025 22:47'
+	#'squeak_changestamp' : 'ct 10/3/2025 18:58'
 }
 UserActivityTracker >> start [
 
+	self noteActivity. "optimistic"
 	self world: self currentWorld.
 ]
 
