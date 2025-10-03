@@ -553,7 +553,7 @@ SnapshotReminder >> saveImage [
 
 {
 	#category : #'reminding - docking bar',
-	#'squeak_changestamp' : 'ct 10/3/2025 02:35'
+	#'squeak_changestamp' : 'ct 10/3/2025 04:12'
 }
 SnapshotReminder >> showDockingBarReminder [
 
@@ -575,8 +575,10 @@ SnapshotReminder >> showDockingBarReminder [
 	menuItem balloonText: message.
 	menuItem showBalloon: message at: menuItem center.
 	menuItem world activeHand balloonHelpList removeAllSuchThat: [:ea |
-		(ea textMorph contents = message)
-			ifTrue: [(menuItem valueOfProperty: #snapshotReminderBalloons ifAbsentPut: [IdentitySet new]) add: ea];
+		ea textMorph contents = message
+			ifTrue:
+				[ea on: #mouseDown send: #delete to: ea.
+				(menuItem valueOfProperty: #snapshotReminderBalloons ifAbsentPut: [IdentitySet new]) add: ea];
 			yourself].
 ]
 
