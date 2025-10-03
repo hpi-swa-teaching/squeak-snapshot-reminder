@@ -10,3 +10,15 @@ Metacello new
 	get; "for updates"
 	load.
 ```
+
+Optionally, `load: #withRecommended` instead for self-updates.
+
+To enable snapshot reminders, do this:
+
+```smalltalk
+SnapshotReminder ensureDefault startProcess.
+```
+
+Or go to the preference browser and set a snapshot reminder threshold.
+
+To disable snapshot reminders, delete the snapshot reminder threshold in the preferences.
