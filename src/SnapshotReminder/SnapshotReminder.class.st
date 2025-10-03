@@ -255,14 +255,15 @@ SnapshotReminder >> defaultSnoozeDelay [
 
 {
 	#category : #actions,
-	#'squeak_changestamp' : 'ct 10/2/2025 22:12'
+	#'squeak_changestamp' : 'ct 10/3/2025 20:03'
 }
 SnapshotReminder >> explain [
 
 	self flag: #todo. "use SBE if installed"
 	^ HelpBrowser future in: [:helpBrowser |
-		helpBrowser open
+		[helpBrowser open
 			model showTopicNamed: #workingWithSqueak]
+				on: CurrentReadOnlySourceFiles do: [:ex | ex resume: ex defaultAction] "<= Squeak 6.0 (non-Errors are caught by promises too)"]
 ]
 
 {
@@ -415,15 +416,32 @@ SnapshotReminder >> register [
 
 {
 	#category : #reminding,
-	#'squeak_changestamp' : 'ct 10/3/2025 04:12'
+	#'squeak_changestamp' : 'ct 10/3/2025 20:03'
 }
 SnapshotReminder >> remindUser [
 
-	| message options promise choice |
 	self future showDockingBarReminder.
 	
 	self waitUntilUserIsInactive.
-	
+	self remindUserNow.
+]
+
+{
+	#category : #reminding,
+	#'squeak_changestamp' : 'ct 10/2/2025 18:31'
+}
+SnapshotReminder >> remindUserAgain [
+
+	^ self remindUser
+]
+
+{
+	#category : #reminding,
+	#'squeak_changestamp' : 'ct 10/3/2025 20:03'
+}
+SnapshotReminder >> remindUserNow [
+
+	| message options promise choice |
 	message := 
 'You have not saved your image for quite some time!<br>
 <br>
@@ -444,7 +462,7 @@ Saving your image regularly preserves your entire session and can prevent data l
 			(["hack to fine-tune appearance without proper extensions"
 			self currentWorld future in: [:world |
 				world isMorph ifTrue:
-					[(world submorphThat: [:m | (m isKindOf: DialogWindow) and: [m message asString beginsWith: message lines first]] ifNone: nil) ifNotNil: [:m |
+					[(world submorphThat: [:m | (m isKindOf: DialogWindow) and: [m message asString beginsWith: message asString "<= Squeak 6.0" lines first]] ifNone: nil) ifNotNil: [:m |
 						m title: 'Reminder'.
 						m messageMorph averageLineLength: 55; imageForm.
 						m buttonRowMorph listDirection: #leftToRight.
@@ -463,15 +481,6 @@ Saving your image regularly preserves your entire session and can prevent data l
 	choice = #snooze
 		ifTrue: [self future hideDockingBarReminder]
 		ifFalse: [self canSnooze ifTrue: [self snooze]].
-]
-
-{
-	#category : #reminding,
-	#'squeak_changestamp' : 'ct 10/2/2025 18:31'
-}
-SnapshotReminder >> remindUserAgain [
-
-	^ self remindUser
 ]
 
 {
