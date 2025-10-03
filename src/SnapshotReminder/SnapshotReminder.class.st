@@ -4,8 +4,6 @@ I remind the user to save their image regularly when they don't do it by themsel
 Class {
 	#name : #SnapshotReminder,
 	#superclass : #Object,
-	#traits : 'TCtApp',
-	#classTraits : 'TCtApp classTrait',
 	#instVars : [
 		'reminderThreshold',
 		'snoozeDelay',
@@ -24,30 +22,12 @@ Class {
 }
 
 {
-	#category : #'app - accessing',
-	#'squeak_changestamp' : 'ct 10/3/2025 02:16'
-}
-SnapshotReminder class >> appName [
-
-	^ 'Snapshot Reminder'
-]
-
-{
 	#category : #accessing,
 	#'squeak_changestamp' : 'ct 10/2/2025 20:36'
 }
 SnapshotReminder class >> assureDefault [
 
 	^ self default ifNil: [self default: self new; default]
-]
-
-{
-	#category : #'app - accessing',
-	#'squeak_changestamp' : 'ct 10/3/2025 02:16'
-}
-SnapshotReminder class >> baselineName [
-
-	^ 'SnapshotReminder'
 ]
 
 {
@@ -187,15 +167,6 @@ SnapshotReminder class >> initialize [
 	Smalltalk
 		addToStartUpList: self;
 		addToShutDownList: self.
-]
-
-{
-	#category : #'app - accessing',
-	#'squeak_changestamp' : 'ct 10/3/2025 02:16'
-}
-SnapshotReminder class >> packageNamePrefix [
-
-	^ 'SnapshotReminder'
 ]
 
 {

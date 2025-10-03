@@ -6,7 +6,7 @@ Class {
 
 {
 	#category : #baseline,
-	#'squeak_changestamp' : 'ct 10/3/2025 03:45'
+	#'squeak_changestamp' : 'ct 10/3/2025 18:38'
 }
 BaselineOfSnapshotReminder >> baseline: spec [
 	<baseline>
@@ -18,25 +18,13 @@ BaselineOfSnapshotReminder >> baseline: spec [
 				[spec repository: 'github://LinqLover/squeak-appframework:main'].
 		
 		"packages"
-		spec package: 'SnapshotReminder' with:
-			[spec requires: #('CtAppFramework')].
+		spec package: 'SnapshotReminder'.
 		
 		"groups"
-		spec group: #default with: #('SnapshotReminder')]
-]
-
-{
-	#category : #'self-updating',
-	#'squeak_changestamp' : 'ct 10/3/2025 03:59'
-}
-BaselineOfSnapshotReminder >> installDependencies [
-	"Install most important dependencies. Metacello>>#get is not recursive."
-
-	Metacello new
-		baseline: 'CtAppFramework';
-		repository: 'github://LinqLover/squeak-appframework:main';
-		get;
-		load.
+		spec
+			group: #default with: #('SnapshotReminder');
+			group: #recommended with: #('CtAppFramework');
+			group: #withRecommended with: #(default recommended)].
 ]
 
 {
