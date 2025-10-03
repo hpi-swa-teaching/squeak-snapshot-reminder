@@ -445,7 +445,7 @@ SnapshotReminder >> register [
 
 {
 	#category : #reminding,
-	#'squeak_changestamp' : 'ct 10/3/2025 02:42'
+	#'squeak_changestamp' : 'ct 10/3/2025 04:05'
 }
 SnapshotReminder >> remindUser [
 
@@ -460,7 +460,7 @@ SnapshotReminder >> remindUser [
 Last snapshot was saved at <b>{1}</b>.<br>
 <br>
 Saving your image regularly preserves your entire session and can prevent data loss.'
-		asTextFromHtml format: {self lastSnapshotTime talkPrettyPrintString}.
+		asTextFromHtml format: {self lastSnapshotTime snapshotPrettyPrintString}.
 	options := OrderedDictionary new.
 	options at: 'Save now' put: #saveImage.
 	self canSnooze ifTrue: [options at: 'Snooze' put: #snooze].
