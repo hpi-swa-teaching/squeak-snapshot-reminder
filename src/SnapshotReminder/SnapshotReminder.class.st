@@ -169,12 +169,12 @@ SnapshotReminder class >> durationFromString: aString [
 
 {
 	#category : #'app - accessing',
-	#'squeak_changestamp' : 'ct 10/3/2025 02:47'
+	#'squeak_changestamp' : 'ct 10/3/2025 04:02'
 }
 SnapshotReminder class >> githubRepositoryParams [
 	"{owner. name. directory}"
 
-	^ {'hpi-swa-teaching'. 'squeak-snapshot-reminder'. 'packages'}
+	^ {'hpi-swa-teaching'. 'squeak-snapshot-reminder'. 'src'}
 ]
 
 {
