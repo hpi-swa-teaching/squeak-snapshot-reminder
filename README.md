@@ -16,7 +16,7 @@ Optionally, `load: #withRecommended` instead for self-updates.
 To enable snapshot reminders, do this:
 
 ```smalltalk
-SnapshotReminder ensureDefault startProcess.
+SnapshotReminder assureDefault startProcess.
 ```
 
 Or go to the preference browser and set a snapshot reminder threshold.
