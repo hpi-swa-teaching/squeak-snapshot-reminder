@@ -6,7 +6,7 @@ Class {
 
 {
 	#category : #baseline,
-	#'squeak_changestamp' : 'ct 10/3/2025 02:52'
+	#'squeak_changestamp' : 'ct 10/3/2025 03:44'
 }
 BaselineOfSnapshotReminder >> baseline: spec [
 	<baseline>
@@ -18,7 +18,8 @@ BaselineOfSnapshotReminder >> baseline: spec [
 				[spec repository: 'github://LinqLover/squeak-appframework'].
 		
 		"packages"
-		spec package: 'SnapshotReminder'.
+		spec package: 'SnapshotReminder' with:
+			[spec requires: #('CtAppFramework')].
 		
 		"groups"
 		spec group: #default with: #('SnapshotReminder')]
