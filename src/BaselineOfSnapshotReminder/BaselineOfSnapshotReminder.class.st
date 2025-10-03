@@ -27,14 +27,14 @@ BaselineOfSnapshotReminder >> baseline: spec [
 
 {
 	#category : #'self-updating',
-	#'squeak_changestamp' : 'ct 10/3/2025 03:19'
+	#'squeak_changestamp' : 'ct 10/3/2025 03:59'
 }
 BaselineOfSnapshotReminder >> installDependencies [
 	"Install most important dependencies. Metacello>>#get is not recursive."
 
 	Metacello new
 		baseline: 'CtAppFramework';
-		repository: 'github://LinqLover/squeak-appframework';
+		repository: 'github://LinqLover/squeak-appframework:main';
 		get;
 		load.
 ]
