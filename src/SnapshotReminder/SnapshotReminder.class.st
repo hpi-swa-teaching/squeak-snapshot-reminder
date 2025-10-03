@@ -297,7 +297,7 @@ SnapshotReminder >> explain [
 
 {
 	#category : #'reminding - docking bar',
-	#'squeak_changestamp' : 'ct 10/3/2025 02:54'
+	#'squeak_changestamp' : 'ct 10/3/2025 03:57'
 }
 SnapshotReminder >> findDockingBarItem [
 
@@ -306,7 +306,7 @@ SnapshotReminder >> findDockingBarItem [
 	world isMorph ifFalse: [^ nil].
 	dockingBar := (world mainDockingBars ifEmpty: [^ nil]) first.
 	^ (dockingBar submorphs select: #isMenuItemMorph)
-		detect: [:m | m submorphIndex = 1] ifNone: [nil]
+		at: 1 ifAbsent: [^ nil]
 ]
 
 {
