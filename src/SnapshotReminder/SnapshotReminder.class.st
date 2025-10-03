@@ -690,13 +690,13 @@ SnapshotReminder >> userInactivityThreshold [
 
 {
 	#category : #reminding,
-	#'squeak_changestamp' : 'ct 10/2/2025 23:39'
+	#'squeak_changestamp' : 'ct 10/3/2025 18:45'
 }
 SnapshotReminder >> waitUntilUserIsInactive [
 
 	| maxDelay start threshold |
 	maxDelay := self maxUserActiveDelay.
-	start := DateAndTime now.
+	start := self now.
 	[((threshold := self userInactivityThreshold)
 		ifNil: [true]
 		ifNotNil: [self now - self userActivityTracker lastActiveTime >= threshold])
@@ -704,5 +704,5 @@ SnapshotReminder >> waitUntilUserIsInactive [
 				[(maxDelay := self maxUserActiveDelay)
 					ifNil: [false]
 					ifNotNil: [self now - start >= maxDelay]]]
-			whileFalse: [self interCyclePause: (threshold min: (maxDelay ifNil: [threshold]))].
+		whileFalse: [self interCyclePause: (threshold min: (maxDelay ifNil: [threshold]))].
 ]
