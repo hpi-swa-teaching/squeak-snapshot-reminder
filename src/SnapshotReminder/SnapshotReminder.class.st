@@ -445,7 +445,7 @@ SnapshotReminder >> register [
 
 {
 	#category : #reminding,
-	#'squeak_changestamp' : 'ct 10/3/2025 04:05'
+	#'squeak_changestamp' : 'ct 10/3/2025 04:12'
 }
 SnapshotReminder >> remindUser [
 
@@ -477,7 +477,8 @@ Saving your image regularly preserves your entire session and can prevent data l
 					[(world submorphThat: [:m | (m isKindOf: DialogWindow) and: [m message asString beginsWith: message lines first]] ifNone: nil) ifNotNil: [:m |
 						m title: 'Reminder'.
 						m messageMorph averageLineLength: 55; imageForm.
-						m buttonRowMorph listDirection: #leftToRight]]].
+						m buttonRowMorph listDirection: #leftToRight.
+						m selectButton: m buttons second "prevent accidental enter to save image"]]].
 			
 			Project uiManager
 				chooseOptionFromLabeledValues: options
