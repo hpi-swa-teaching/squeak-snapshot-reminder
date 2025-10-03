@@ -32,16 +32,15 @@ SnapshotReminder class >> assureDefault [
 
 {
 	#category : #'initialize-release',
-	#'squeak_changestamp' : 'ct 10/3/2025 02:45'
+	#'squeak_changestamp' : 'ct 10/3/2025 18:43'
 }
 SnapshotReminder class >> cleanUp: aggressive [
 
 	aggressive ifTrue:
 		[self default ifNotNil: [:ea | ea stopProcess].
 		self default: nil.
-		self registeredInstances do: [:ea |
-			ea stopProcess; unregister].
-		RegisteredInstances := nil].
+		self registeredInstances copy do: [:ea |
+			ea stopProcess; unregister]].
 ]
 
 {
