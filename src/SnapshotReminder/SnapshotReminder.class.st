@@ -254,6 +254,17 @@ SnapshotReminder >> defaultSnoozeDelay [
 ]
 
 {
+	#category : #'reminding - docking bar',
+	#'squeak_changestamp' : 'ct 10/3/2025 20:02'
+}
+SnapshotReminder >> dockingBarMenuBalloonClicked: anEvent from: aBalloonMorph [
+
+	"bring up the reminder now again, but in the right process"
+	self userActivityTracker ifNotNil: [:tracker | tracker lastActiveTime: DateAndTime new]. "override waitUntilUserIsInactive"
+	self resetSnooze.
+]
+
+{
 	#category : #actions,
 	#'squeak_changestamp' : 'ct 10/3/2025 20:03'
 }
@@ -502,6 +513,15 @@ SnapshotReminder >> reminderThreshold: aDuration [
 ]
 
 {
+	#category : #reminding,
+	#'squeak_changestamp' : 'ct 10/3/2025 20:03'
+}
+SnapshotReminder >> resetSnooze [
+
+	self snoozeTime: nil.
+]
+
+{
 	#category : #control,
 	#'squeak_changestamp' : 'ct 10/3/2025 02:41'
 }
@@ -533,7 +553,7 @@ SnapshotReminder >> saveImage [
 
 {
 	#category : #'reminding - docking bar',
-	#'squeak_changestamp' : 'ct 10/3/2025 04:12'
+	#'squeak_changestamp' : 'ct 10/3/2025 20:03'
 }
 SnapshotReminder >> showDockingBarReminder [
 
@@ -557,7 +577,10 @@ SnapshotReminder >> showDockingBarReminder [
 	menuItem world activeHand balloonHelpList removeAllSuchThat: [:ea |
 		ea textMorph contents = message
 			ifTrue:
-				[ea on: #mouseDown send: #delete to: ea.
+				[ea
+					on: #mouseEnter send: #show to: Cursor webLink;
+					on: #mouseLeave send: #show to: Cursor normal;
+					on: #mouseUp send: #dockingBarMenuBalloonClicked:from: to: self.
 				(menuItem valueOfProperty: #snapshotReminderBalloons ifAbsentPut: [IdentitySet new]) add: ea];
 			yourself].
 ]
@@ -631,12 +654,12 @@ SnapshotReminder >> startProcess [
 
 {
 	#category : #updating,
-	#'squeak_changestamp' : 'ct 10/3/2025 02:43'
+	#'squeak_changestamp' : 'ct 10/3/2025 20:03'
 }
 SnapshotReminder >> startUp [
 
 	self lastSnapshotTime: self now. "Resuming a previously unsaved image will trigger this hook to, but here we assume that if the user does not recover unsaved changes manually, they have discarded them deliberately."
-	self snoozeTime: nil.
+	self resetSnooze.
 	self startProcess.
 ]
 
