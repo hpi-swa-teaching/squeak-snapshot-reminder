@@ -237,11 +237,11 @@ SnapshotReminder >> defaultMaxUserActiveDelay [
 
 {
 	#category : #'initialize-release',
-	#'squeak_changestamp' : 'ct 10/2/2025 19:54'
+	#'squeak_changestamp' : 'ct 10/5/2025 18:34'
 }
 SnapshotReminder >> defaultReminderThreshold [
 
-	^ 3 hours
+	^ 24 hours
 ]
 
 {
