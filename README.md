@@ -3,6 +3,8 @@ Regulary reminds Squeak users to save their image
 
 ## Installation
 
+Get a Squeak 6.0 or Squeak Trunk (6.1Alpha) image.
+
 ```smalltalk
 Metacello new
 	baseline: 'SnapshotReminder';
