@@ -255,12 +255,12 @@ SnapshotReminder >> defaultSnoozeDelay [
 
 {
 	#category : #'reminding - docking bar',
-	#'squeak_changestamp' : 'ct 10/3/2025 20:02'
+	#'squeak_changestamp' : 'ct 10/8/2025 19:04'
 }
 SnapshotReminder >> dockingBarMenuBalloonClicked: anEvent from: aBalloonMorph [
 
 	"bring up the reminder now again, but in the right process"
-	self userActivityTracker ifNotNil: [:tracker | tracker lastActiveTime: DateAndTime new]. "override waitUntilUserIsInactive"
+	self userActivityTracker lastActiveTime: DateAndTime new. "override waitUntilUserIsInactive"
 	self resetSnooze.
 ]
 
@@ -292,6 +292,20 @@ SnapshotReminder >> findDockingBarItem [
 ]
 
 {
+	#category : #control,
+	#'squeak_changestamp' : 'ct 10/8/2025 21:05'
+}
+SnapshotReminder >> getStartUpTime [
+
+	self shouldRemindAlways ifTrue: [^ self lastSnapshotTime].
+	
+	self future yourself wait. "Wait one UI cycle for handling any leftover mouseUp/keyUp events that were issued while saving the image"
+	[self userActivityTracker lastActiveTime > self lastSnapshotTime]
+		whileFalse: [self interCyclePause: nil].
+	^ self now
+]
+
+{
 	#category : #'reminding - docking bar',
 	#'squeak_changestamp' : 'ct 10/3/2025 02:34'
 }
@@ -307,7 +321,7 @@ SnapshotReminder >> hideDockingBarReminder [
 
 {
 	#category : #'initialize-release',
-	#'squeak_changestamp' : 'ct 10/2/2025 23:41'
+	#'squeak_changestamp' : 'ct 10/8/2025 19:03'
 }
 SnapshotReminder >> initialize [
 
@@ -317,6 +331,8 @@ SnapshotReminder >> initialize [
 	self snoozeDelay: self defaultSnoozeDelay.
 	self maxUserActiveDelay: self defaultMaxUserActiveDelay.
 	self lastSnapshotTime: DateAndTime now. "optimistic"
+	
+	userActivityTracker := UserActivityTracker new.
 ]
 
 {
@@ -379,13 +395,11 @@ SnapshotReminder >> maxUserActiveDelay [
 
 {
 	#category : #'accessing - preferences',
-	#'squeak_changestamp' : 'ct 10/3/2025 02:40'
+	#'squeak_changestamp' : 'ct 10/8/2025 19:04'
 }
 SnapshotReminder >> maxUserActiveDelay: aDurationOrNil [
 
 	maxUserActiveDelay := aDurationOrNil.
-	
-	self updateUserActivityTracker.
 ]
 
 {
@@ -523,10 +537,13 @@ SnapshotReminder >> resetSnooze [
 
 {
 	#category : #control,
-	#'squeak_changestamp' : 'ct 10/3/2025 02:41'
+	#'squeak_changestamp' : 'ct 10/8/2025 22:14'
 }
 SnapshotReminder >> runSnapshotReminder [
 
+	| startUpTime |
+	startUpTime := self getStartUpTime.
+	
 	[| now |
 	now := self now.
 	self isSnoozing
@@ -534,7 +551,7 @@ SnapshotReminder >> runSnapshotReminder [
 			[now >= self snoozeTime ifTrue:
 				[self remindUserAgain]]
 		ifFalse:
-			[self now - self lastSnapshotTime >= self reminderThreshold ifTrue:
+			[self now - startUpTime >= self reminderThreshold ifTrue:
 				[self remindUser]].
 	
 	self interCyclePause: self snoozeDelay]
@@ -549,6 +566,16 @@ SnapshotReminder >> saveImage [
 
 	"shutDown will kill the active process, so we MUST do this in the UI process"
 	^ Smalltalk future saveSession
+]
+
+{
+	#category : #'accessing - preferences',
+	#'squeak_changestamp' : 'ct 10/8/2025 22:08'
+}
+SnapshotReminder >> shouldRemindAlways [
+	"If true, always remind the user after the specified threshold, starting from the last snapshot of the image. If false, only start counting the threshold with the first user activity after the snapshot. The latter is helpful if the user keeps their image unattended after saving for a long time, but might miss important changes that are not bound to interactivity, such as long-running computation started before the last snapshot."
+
+	^ false
 ]
 
 {
@@ -641,13 +668,13 @@ SnapshotReminder >> snoozeTime: aDateAndTimeOrNil [
 
 {
 	#category : #control,
-	#'squeak_changestamp' : 'ct 10/2/2025 23:16'
+	#'squeak_changestamp' : 'ct 10/8/2025 19:03'
 }
 SnapshotReminder >> startProcess [
 
 	self stopProcess.
 	
-	self userActivityTracker ifNotNil: [:tracker | tracker start].
+	self userActivityTracker start.
 	process := [self runSnapshotReminder]
 		forkAt: Processor systemBackgroundPriority named: self printString.
 ]
@@ -665,11 +692,11 @@ SnapshotReminder >> startUp [
 
 {
 	#category : #control,
-	#'squeak_changestamp' : 'ct 10/3/2025 00:26'
+	#'squeak_changestamp' : 'ct 10/8/2025 19:04'
 }
 SnapshotReminder >> stopProcess [
 
-	self userActivityTracker ifNotNil: [:tracker | tracker stop].
+	self userActivityTracker stop.
 	self hideDockingBarReminder.
 	
 	process ifNil: [^ self].
@@ -684,22 +711,6 @@ SnapshotReminder >> stopProcess [
 SnapshotReminder >> unregister [
 
 	self class registeredInstances remove: self ifAbsent: [].
-]
-
-{
-	#category : #private,
-	#'squeak_changestamp' : 'ct 10/3/2025 02:40'
-}
-SnapshotReminder >> updateUserActivityTracker [
-
-	self maxUserActiveDelay
-		ifNil:
-			[userActivityTracker ifNotNil: [userActivityTracker stop].
-			userActivityTracker := nil]
-		ifNotNil:
-			[userActivityTracker ifNil:
-				[userActivityTracker := UserActivityTracker new.
-				self isRunning ifTrue: [userActivityTracker start]]].
 ]
 
 {

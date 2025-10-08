@@ -46,6 +46,17 @@ UserActivityTracker >> filterEvent: anEvent for: aMorph [
 ]
 
 {
+	#category : #'initialize-release',
+	#'squeak_changestamp' : 'ct 10/8/2025 19:38'
+}
+UserActivityTracker >> initialize [
+
+	super initialize.
+	
+	lastActiveTime := DateAndTime new. "pessimistic"
+]
+
+{
 	#category : #private,
 	#'squeak_changestamp' : 'ct 10/2/2025 22:43'
 }
@@ -94,11 +105,10 @@ UserActivityTracker >> noteActivity [
 
 {
 	#category : #control,
-	#'squeak_changestamp' : 'ct 10/3/2025 18:58'
+	#'squeak_changestamp' : 'ct 10/8/2025 19:37'
 }
 UserActivityTracker >> start [
 
-	self noteActivity. "optimistic"
 	self world: self currentWorld.
 ]
 
