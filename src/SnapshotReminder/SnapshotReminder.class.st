@@ -462,7 +462,7 @@ SnapshotReminder >> remindUserAgain [
 
 {
 	#category : #reminding,
-	#'squeak_changestamp' : 'ct 10/3/2025 20:03'
+	#'squeak_changestamp' : 'ct 10/8/2025 22:05'
 }
 SnapshotReminder >> remindUserNow [
 
@@ -488,10 +488,20 @@ Saving your image regularly preserves your entire session and can prevent data l
 			self currentWorld future in: [:world |
 				world isMorph ifTrue:
 					[(world submorphThat: [:m | (m isKindOf: DialogWindow) and: [m message asString beginsWith: message asString "<= Squeak 6.0" lines first]] ifNone: nil) ifNotNil: [:m |
+						| preferredPosition |
 						m title: 'Reminder'.
-						m messageMorph averageLineLength: 55; imageForm.
+						m messageMorph averageLineLength: 55; imageForm. "hack to properly compute width before the following layout change"
 						m buttonRowMorph listDirection: #leftToRight.
-						m selectButton: m buttons second "prevent accidental enter to save image"]]].
+						m selectButton: m buttons second "prevent accidental enter to save image".
+						
+						"center (undo getUserResponse*AtHand*)"
+						m fullBounds.
+						m preferredPosition: (preferredPosition := m world center); moveToPreferredPosition.
+						"prevent accidental mouse click on button"
+						(m morphsAt: self currentHand position)
+							detect: [:ea | ea isButton]
+							ifFound: [:ea |
+								m preferredPosition: (preferredPosition := preferredPosition + ea height); moveToPreferredPosition]]]].
 			
 			Project uiManager
 				chooseOptionFromLabeledValues: options
